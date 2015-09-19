@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Punditly.com - Live Sports Commentary</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=8" />
+	<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="css/styles.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="css/supersize.css" type="text/css" media="screen" />
+	<script src="js/common.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="js/lib/supersized.3.2.7.js"></script>
+	
+	
+	<script type="text/javascript">
+		var options = {
+			slideshow:1,
+			start_slide:0,
+			slideshow_interval: 7000,
+			transition_speed: 1000,
+			transition:1,
+			slides: [
+				{image : 'http://25.media.tumblr.com/6c66b0a3f4da6cf1f1fa0c5b1834a318/tumblr_mlp5owFEwO1rzw4ivo1_1280.jpg', title : 'EPL', url : ''},
+				{image : 'img/2012_Nba_All-Star_Wallpapers.jpg001.jpg', title : 'NBA', url : ''},
+				{image : 'img/Manchester-City-Champions_2764510.jpg', title : 'EPL', url : ''},
+				{image : 'img/madden-nfl-13-pileup-wallpaper.jpg', title : 'NFL', url : ''}
+			]
+		};
+		// Slideshow
+		$(function($){
+			$.supersized(options); 
+		});
+
+		function boxHeight () {
+			$("#content").height();
+			var ah = $("#content").height();
+			var ph = $("#overlay").height();
+			var mh = Math.ceil((ph-ah) / 2);
+			$("#content").css('marginTop', mh);				
+		}
+		
+		// Centering the text content
+		jQuery(window).resize(function () {
+			boxHeight();
+		}).load(function() {
+			boxHeight();
+			// Show the content and focus the email input
+			$("#content").fadeIn();
+			$("#email").focus();
+			
+		});
+	</script>
+</head>
+<body>
+	<div id="overlay"></div>
+	
+	<!-- Horizontal Content Block -->
+	<div id="content">
+	
+		<!-- Left Content Block -->
+		<div id="content-left">
+			<div class="container">
+				
+				<!--Logo in bar-->
+				<p><a href="http://www.punditly.com" class="stamp">Punditly.com</a></p>
+				
+				<!--Message-->
+				<p id="message">We are currently working on <br />something engaging and <br />interactive for sports fans.</p>
+				
+				<!-- Countdown -->
+				<div id="countdown"></div>
+			</div>
+		</div>
+		
+		<!-- Right Content Block -->
+		<!--div id="content-right">
+			<div class="container">
+				<div id="logo"><p>Don’t miss anything, get notified!</p></div>
+				<form id="subscribe" action="mail.php" method="post">
+					<fieldset>
+						<input type="text" size="30" value="" name="email" id="email" />
+						<input type="submit" value="Subscribe" id="submit" name="submit" />
+						<div id="response"></div>
+					</fieldset> 
+				</form>
+				<noscript>
+				
+				<p id="social" class="sociacount"></p>
+				</noscript>
+				
+				<div id="twitter"></div>
+			</div>
+		</div-->
+		
+	</div>
+
+	<!--Thumbnail Navigation-->
+	<div id="prevthumb"></div><div id="nextthumb"></div>
+</body>
+</html>

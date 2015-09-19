@@ -1,0 +1,11 @@
+<dataConfig>
+	<dataSource name="punditly" type="MongoDataSource" database="pd" />
+		<document name="models">
+			<entity name="teams" processor="MongoEntityProcessor" query="{}" collection="teams" dataSource="punditly" 
+					transformer="MongoMapperTransformer">
+				<field column="id" name="id" mongoField="_id" />
+				<field column="name" name="name" mongoField="name" />
+				<field column="league" name="league" mongoField="league" />
+			</entity>
+		</document>
+</dataConfig>

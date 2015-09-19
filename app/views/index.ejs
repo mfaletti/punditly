@@ -1,0 +1,65 @@
+<% layout('../layouts/default') -%>
+<% stylesheet('/css/styles.css') -%>
+<% stylesheet('/css/supersize.css?') -%>
+<% script('/js/lib/supersized.3.2.7.js') -%>
+<script>
+	var options = {
+		slideshow:1,
+		start_slide:0,
+		slideshow_interval: 7000,
+		transition_speed: 1000,
+		transition:1,
+		slides: [
+			{image : 'http://25.media.tumblr.com/6c66b0a3f4da6cf1f1fa0c5b1834a318/tumblr_mlp5owFEwO1rzw4ivo1_1280.jpg', title : 'EPL', url : ''},
+			{image : 'img/2012_Nba_All-Star_Wallpapers.jpg001.jpg', title : 'NBA', url : ''},
+			{image : 'img/Manchester-City-Champions_2764510.jpg', title : 'EPL', url : ''},
+			{image : 'img/madden-nfl-13-pileup-wallpaper.jpg', title : 'NFL', url : ''}
+		]
+	};
+	
+	// Slideshow
+	$(function($){
+		$.supersized(options); 
+	});
+
+	function boxHeight () {
+		$("#content").height();
+		var ah = $("#content").height();
+		var ph = $("#overlay").height();
+		var mh = Math.ceil((ph-ah) / 2);
+		$("#content").css('marginTop', mh);				
+	}
+
+	// Centering the text content
+	jQuery(window).resize(function () {
+		boxHeight();
+	}).load(function() {
+		boxHeight();
+		// Show the content and focus the email input
+		$("#content").fadeIn();
+		$("#email").focus();
+
+	});
+</script>
+	<div id="overlay"></div>
+
+	<!-- Horizontal Content Block -->
+	<div id="content">
+
+		<!-- Left Content Block -->
+		<div id="content-left">
+			<div class="">
+			
+				<!--Logo in bar-->
+				<p><a href="http://www.punditly.com" class="stamp">Punditly.com</a></p>
+			
+				<!--Message-->
+				<p id="message">We are currently working on <br />something engaging and <br />interactive for sports fans.</p>
+			
+				<!-- Countdown -->
+				<div id="countdown"></div>
+			</div>
+		</div>
+	</div>
+	<!--Thumbnail Navigation-->
+	<div id="prevthumb"></div><div id="nextthumb"></div>

@@ -1,0 +1,62 @@
+<% layout('../../../layouts/admin') -%>
+<% block('title',' - Edit Team')%>
+<% script('/js/views/admin/leagues/edit.js') -%>
+<div class="row">
+	<div class="col-xs-12">
+		<div id="header"></div>
+		<div id="identity"></div>
+		<div id="delete"></div>
+	</div>
+</div>
+<script type="text/template", id="tmpl-header">
+	<div class="page-header"><h1><a href="/admin/leagues/">Leagues</a> / {{=name}}</h1></div>
+</script>
+<script type="text/template", id="tmpl-identity">
+	<fieldset>
+		<legend>Identity</legend>
+		<div class="alerts">
+			{{ _.each(errors, function(err) { }}
+			<div class="alert alert-danger alert-dismissable">
+				<button class="close" type="button" data-dismiss="alert">&times;</button>{{ err }}
+			</div>
+			{{ }); }}
+			{{ if (success) { }}
+			<div class="alert alert-info alert-dismissable">
+				<button class="close" type="button" data-dismiss="alert">&times;</button>Changes have been saved.
+			{{ } }}
+			</div>
+		</div>
+		<div class='control-group {{- errfor-name ? "has-error" : ""}}'>
+			<label class="control-group">Name:</label>
+			<input class="form-control" type="text" name="name" value='{{=name}}'>
+			<span class="help-block">{{- errfor.name }}</span>
+		</div>
+		<div class='control-group {{- errfor.country ? "has-error" : "" }}'>
+			<label class="control-label">Country:</label>
+			<input class="form-control" type="text" name="country" value='{{=country}}'>
+			<span class="help-block">{{- errfor.country }}</span>
+		</div>
+		<div class="control-group"><button class="btn btn-primary btn-update" type='button'>Update</button></div>
+	</fieldset>
+</script>
+<script type="text/template" id="tmpl-delete">
+	<fieldset>
+		<legend>Danger Zone</legend>
+		<div class="alerts">
+		{{ _.each(errors, function() { }}
+			<div class="alert alert-danger alert-dismissible">
+				<button class="close" type="button" data-dismiss="alert">&times;</button>{{- err}}
+			</div>
+		{{ }); }}
+		</div>
+		<div class="control-group">
+			<span class="help-block">
+				<span class="label label-danger">If you do this, it cannot be undone.</span>
+			</span>
+		</div>
+		<div class="control-group">
+			<button class="btn btn-danger btn-delete" type="button">Delete</button>
+		</div>
+	</fieldset>
+</script>
+<script type="text/template" id="data-record"><%-data.record%></script>

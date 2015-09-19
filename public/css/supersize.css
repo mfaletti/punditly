@@ -1,0 +1,52 @@
+/* Supersized - Fullscreen Slideshow jQuery Plugin
+============================================================================ **/
+#supersized-loader { position:absolute; top:50%; left:50%; z-index:10; width:60px; height:60px; margin:-30px 0 0 -30px; text-indent:-999em; background-color:#111; background: url(../img/progress.gif) no-repeat center center rgba(0,0,0,0.8); -webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px;}
+
+#supersized { position:fixed; left:0; top:0; overflow:hidden; z-index:-999; height:100%; width:100%; }
+#supersized img{ width:auto; height:auto; position:relative; display:none; outline:none; border:none; }
+#supersized.speed img { -ms-interpolation-mode:nearest-neighbor; image-rendering: -moz-crisp-edges; }	/*Speed*/
+#supersized.quality img { -ms-interpolation-mode:bicubic; image-rendering: optimizeQuality; }			/*Quality*/
+
+#supersized a { z-index:-30; position:absolute; overflow:hidden; top:0; left:0; width:100%; height:100%; background:#111;}
+#supersized a.prevslide { z-index:-20; }
+#supersized a.activeslide { z-index:-10; }
+#supersized a.prevslide img, #supersized a.activeslide img{ display:inline; }
+
+/*Controls Section*/
+#controls-wrapper {
+    /* background: url("../img/nav-bg.png") repeat scroll 0 0 rgba(0, 0, 0, 0.1); */
+    bottom: 0;
+    height: 55px;
+    left: 0;
+    margin: 0 auto;
+    position: fixed;
+    width: 100%;
+    z-index: 4;
+}
+#controls { overflow:hidden; height:100%; text-align:left; z-index:5; }
+#slidecounter {
+    color: #00aeed;
+    float: left;
+    margin: 17px 10px 17px 20px;
+    text-shadow: 0 -1px 0 #000000;
+}
+#slidecaption {
+    color: #FFFFFF;
+    float: left;
+    margin: 17px 20px 17px 0;
+    overflow: hidden;
+    text-shadow: 0 2px 0 #000000;
+}
+#navigation {
+    float: right;
+    height: 60px;
+    margin: 20px 20px 0 0;
+}
+
+/* Thumbnail Navigation */	
+#nextthumb,#prevthumb { z-index:6; display:none; position:fixed; bottom:12px; height:75px; width:100px; overflow:hidden; background:#ddd; border:2px solid #fff; -webkit-box-shadow:0 0 5px #000; }
+#nextthumb { right:12px; }
+#prevthumb { left:12px; }
+#nextthumb img, #prevthumb img { width:150px; height:auto;  }
+#nextthumb:active, #prevthumb:active { bottom:10px; }
+#navigation > :hover,#nextthumb:hover, #prevthumb:hover { cursor:pointer; }

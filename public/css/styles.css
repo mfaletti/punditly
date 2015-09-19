@@ -1,0 +1,45 @@
+/** ================== punditly.com ================= **/
+body {
+	color: #fff;
+}
+#overlay { background: url(../img/overlay.png) repeat scroll 0 0 transparent; position:fixed; left:0; top:0; overflow:hidden; z-index:-1; height:100%; width:100%; opacity: 0.5;}
+#content {
+  background: url("/img/separator.png") no-repeat scroll center 0 rgba(0, 0, 0, 0.75);
+	-ms-filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#BF000000,endColorstr=#BF000000);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#BF000000,endColorstr=#BF000000);
+	zoom: 1;	
+  overflow: hidden;
+  padding: 10px;
+	display: none;
+	position: relative;
+	width: 100%;
+}
+#content-left, #content-right {
+	/*width: 100%;*/
+	float: left;
+	display: inline;
+}
+#content-left .container {
+	padding-right: 20px;
+}
+#content-right{
+	
+}
+#content-right .container{
+	padding-left: 20px;
+}
+#logo {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+
+#message {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 22px;
+}
+.message {
+	margin-bottom: 0;
+}

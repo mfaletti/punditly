@@ -1,0 +1,10 @@
+bower_components/*
+node_modules/*
+npm-debug.log
+.DS_Store
+build
+dist
+vendor
+.gitmodules
+.tm_sync.config
+*.sublime*

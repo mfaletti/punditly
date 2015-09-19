@@ -1,0 +1,57 @@
+<% layout('../../../layouts/admin') -%>
+<% block('title',' - Manage Fixtures')%>
+<% script('/js/views/admin/fixtures/create.js') -%>
+<div class="row">
+	<div class="col-xs-12">
+		<div id="header">
+			<div class="page-header"><h1><a href="/admin/fixtures/">Fixtures</a> / New</h1></div>
+		</div>
+		<div id="alerts"></div>
+		<form class="col-xs-5" id="fixture">
+			<div id="home">
+				<div class="form-group">
+					<label>Home Team</label>
+					<input class="form-control autocomplete" id="home-team" name="homeTeam">
+					<div class="suggestion" id="homeSuggest"></div>
+					<span class="help-block"></span>
+				</div>
+			</div>
+			<div id="away">
+				<div class="form-group">
+					<label>Away Team</label>
+					<input class="form-control autocomplete" id="away-team" name="awayTeam">
+					<div class="suggestion" id="awaySuggest"></div>
+					<span class="help-block"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>League</label>
+				<select class="form-control" id="league" name="league">
+					<option value="">Select</option>
+				</select>
+				<span class="help-block"></span>
+			</div>
+			<div class="form-group">
+				<label>Date</label>
+				<input class="form-control" id="datetimepicker" placeholder="Date" name="date">
+				<span class="help-block"></span>
+			</div>
+			<button type="submit" class="btn btn-primary save">Submit</button>
+		</form>
+	</div>
+</div>
+<script type="text/template" id="tmpl-alerts">
+<div class="alerts">
+	{{ _.each(errors, function(err) { }}
+	<div class="alert alert-danger alert-dismissable">
+		<button class="close" type="button" data-dismiss="alert">&times;</button>{{= err }}
+	</div>
+	{{ }); }}
+	{{ if (success) { }}
+	<div class="alert alert-info alert-dismissable">
+		<button class="close" type="button" data-dismiss="alert">&times;</button>Changes have been saved.
+	{{ } }}
+	</div>
+</div>
+</script>
+<script type="text/template" id="data-results"><%-data.results%></script>
