@@ -39,7 +39,7 @@ module.exports = function(grunt) {
             src: ['src/js/bootstrap-datetimepicker.js','build/css/bootstrap-datetimepicker.css'], dest: 'vendor/eonasdan-bootstrap-datetimepicker'
           },
           {
-            expand: true, cwd: 'bower_components/bootstrap3-typeahead',
+            expand: true, cwd: 'bower_components/Bootstrap-3-Typeahead',
             src: ['bootstrap3-typeahead.js'], dest: 'vendor/bootstrap3-typeahead/'
           }
         ]

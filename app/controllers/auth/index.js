@@ -1,5 +1,7 @@
 'use strict';
 
+var jwt = require('jsonwebtoken');
+
 var getReturnUrl = function(req) {
   var returnUrl ='/';
   if (req.session.returnUrl) {
@@ -92,6 +94,21 @@ exports.login = function(req, res){
 					return workflow.emit('response');
 				})
 			} else {
+
+				// drop jwt cookie
+				var payload = {
+          sub: user._id,
+          scope: user.roles
+        };
+
+        var token = jwt.sign(payload, req.app.config.jwt_secret,{
+          issuer: 'www.punditly.com',
+          audience: 'www.punditly.com',
+          expiresIn: 60*60*24*30*6
+        });
+
+        res.cookie('AUTH_TOKEN', token, {httpOnly: true});
+
 				req.login(user, function(){
 					if (err) {
 						return workflow.emit('exception', err);

@@ -1,84 +1,71 @@
 'use strict';
-var http = require('http');
+var request = require('request');
 
-exports.find = function(req, res, next) {
-
+exports.find = function(req,res,next) {
 	var workflow = req.app.util.workflow(req, res, next);
 
-	var reqst = http.get('http://api.punditly.com' + req.url.replace('admin/teams', 'v1/teams'), function(response){
-		if (('' + response.statusCode).match(/^5\d\d$/)) {
-			workflow.outcome.errors.push({message: 'service error', code: response.statusCode});
-			return workflow.emit('response');
+	request(req.protocol + '://api.punditly.com/v1' + req.originalUrl.replace('/admin', '') + (Object.keys(req.query).length ? '&' : '?') + 'token=' + req.cookies.AUTH_TOKEN || '', function(error, response, body){
+
+		if (error) {
+			console.log('problem with request: ' + e.message);
+			res.send(JSON.stringify(error));
 		}
 
-		// explicitly treat incoming data as utf8 (avoids issues with multi-byte chars)
-		response.setEncoding('utf8');
+		if (('' + response.statusCode).match(/^502$/)) {
+			
+			var err = {
+				message: 'Gateway error. Service unavailable', 
+				code: response.statusCode
+			};
 
-		// incrementally capture the incoming response body
-		var body = [];
-		response.on('data', function(chunk){
-			body.push(chunk);
-		});
-
-		response.on('end', function(){
-			try {
-				var parsed = JSON.parse(body.join(''));
-			} catch(err) {
-				next({message: 'Unable to parse response as JSON'});
+			workflow.outcome.errors.push(err);
+			if (req.xhr) {
+				return workflow.emit('response');
+			} else {
+				return res.render('admin/teams/index', {data: {results: JSON.stringify({"errors":workflow.outcome.errors})}});
 			}
+		}
 
-			// get leagues
-			req.app.db.models.League.find().lean().exec(function(err, leagues){
-				if (err) {
-					return next(err);
-				}
-
-				parsed.leagues = leagues;
-				if (req.xhr) {
-	      	res.header("Cache-Control", "no-cache, no-store, must-revalidate");
-	      	res.send(parsed);
-	    	} else {
-					res.render('admin/teams/index', {data: {results: JSON.stringify(parsed)}});
-				}
-			});
-		});
-
-		response.on('error', function(err){
-			console.log(JSON.stringify(err));
-		});
-	});
-
-	reqst.on('error', function(e){
-		console.log('problem with request: ' + e.message);
-		res.send(JSON.stringify(e));
+		if (req.xhr) {
+    	res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+    	res.send(body);
+  	} else {
+			res.render('admin/teams/index', {data: {results: body}});
+		}
 	});
 };
 
 exports.read = function(req, res, next) {
-	req.app.db.models.Team.findById(req.params.id, function(err, team){
-		if (err) {
-			return next(err);
+	var workflow = req.app.util.workflow(req, res, next);
+	
+	request(req.protocol + '://api.punditly.com/v1' + req.originalUrl.replace('/admin', '') + (Object.keys(req.query).length ? '&' : '?') + 'token=' + req.cookies.AUTH_TOKEN || '', function(error, response, body){
+
+		if (error) {
+			console.log('problem with request: ' + e.message);
+			res.send(JSON.stringify(error));
 		}
 
-		// get leagues
-		req.app.db.models.League.find().lean().exec(function(err, leagues){
-			if (err) {
-				return next(err);
-			}
+		if (('' + response.statusCode).match(/^502$/)) {
+			
+			var err = {
+				message: 'Gateway error. Service unavailable', 
+				code: response.statusCode
+			};
 
+			workflow.outcome.errors.push(err);
 			if (req.xhr) {
-      	res.header("Cache-Control", "no-cache, no-store, must-revalidate");
-      	res.send({leagues:leagues, team:team});
-    	} else {
-				res.render('admin/teams/edit', {data: {record: JSON.stringify({leagues:leagues, team:team})}});
+				return workflow.emit('response');
+			} else {
+				return res.render('admin/teams/edit', {data: {record: JSON.stringify({"errors":workflow.outcome.errors})}});
 			}
-		});
+		}
 
-		/*if (req.xhr) {
-			res.send(team);
-		} else {
-			res.render('admin/teams/edit', { data: { record: escape(JSON.stringify(team)) } });
-		}*/
+		if (req.xhr) {
+    	res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+    	res.send(body);
+  	} else {
+			res.render('admin/teams/edit', {data: {record: body}});
+		}
 	});
 };
 

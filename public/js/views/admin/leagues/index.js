@@ -42,6 +42,18 @@
 			items: {}
 		}
 	});
+
+	var errorView = Backbone.View.extend({
+		el: '.alerts',
+		template: _.template( $('#tmpl-error').html()),
+		initialize: function(){
+			this.render();
+		},
+		render: function(){
+			this.$el.html(this.template({"errors":app.mainView.results.errors || {}}));
+			return this;
+		}
+	});
 	
 	var HeaderView = Backbone.View.extend({
 		el: '#header',
@@ -196,6 +208,7 @@
 			app.resultsView = new ResultsView();
 			app.filterView = new FilterView();
 			app.pagingView = new PagingView();
+			app.errorView = new errorView();
 		}
 	});
 	

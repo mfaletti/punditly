@@ -26,6 +26,23 @@
 		}
 	});
 
+	var League = Backbone.Model.extend();
+
+	var LeaguesCollection = Backbone.Collection.extend({
+		model: League,
+		url: '/admin/leagues',
+		initialize: function(){
+			this.fetch({
+				success: function(collection){
+					app.leaguesView = new LeaguesView({collection:collection});
+				},
+				error: function(){
+					console.log('error')
+				}
+			});
+		}
+	});
+
 	var Paging = Backbone.Model.extend({
 		defaults: {
 			pages: {},
@@ -41,6 +58,18 @@
 		}
 	});
 
+	var errorView = Backbone.View.extend({
+		el: '.alerts',
+		template: _.template( $('#tmpl-error').html()),
+		initialize: function(){
+			this.render();
+		},
+		render: function(){
+			this.$el.html(this.template({"errors":app.mainView.results.errors || {}}));
+			return this;
+		}
+	});
+
 	var HeaderView = Backbone.View.extend({
 		el: '#header',
 		template: _.template($('#tmpl-header').html()),
@@ -51,6 +80,30 @@
 		},
 		render: function(){
 			this.$el.html(this.template(this.model.attributes));
+		}
+	});
+
+	var LeagueView = Backbone.View.extend({
+		tagName: 'option',
+		render: function(){
+			this.$el.attr('value', this.model.get('name')).html(this.model.get('name'));
+			return this;
+		}
+	});
+
+	var LeaguesView = Backbone.View.extend({
+		el: '#leagues',
+		initialize: function() {
+			this.listenTo(this.collection, 'reset', this.render);
+			this.render();
+		},
+		render: function(){
+			var frag = document.createDocumentFragment();
+			this.collection.each(function(record){
+				var view = new LeagueView({model:record});
+				frag.appendChild(view.render().el);
+			},this);
+			$(this.$el).append(frag);
 		}
 	});
 
@@ -164,10 +217,12 @@
 		initialize: function() {
 			app.mainView = this;
 			this.results = JSON.parse( $('#data-results').html() );
+			var leagues = new LeaguesCollection();
 			app.headerView = new HeaderView();
 			app.resultsView = new ResultsView();
 			app.filterView = new FilterView();
 			app.pagingView = new PagingView();
+			app.errorView = new errorView;
 		}
 	});
 

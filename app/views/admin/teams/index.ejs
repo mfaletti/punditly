@@ -3,6 +3,7 @@
 <% script('/js/views/admin/teams/index.js') -%>
 <div class="row">
 	<div class="col-xs-12">
+		<div class="alerts"></div>
 		<div id="header"></div>
 		<div id="filters"></div>
 		<div id="results-table"></div>
@@ -86,4 +87,12 @@
 	</div>
 </script>
 <script type="text/template" id="tmpl-results-empty-row"><tr><td colspan="5">No documents Matched</td></tr></script>
+<script type="text/template" id="tmpl-error">
+	{{_.each(errors, function(err) { }}
+	<div class="alert alert-danger alert-dismissable">
+		<button class="close" type="button" data-dismiss="alert">&times;</button>{{= err.message }}
+	</div>
+	{{ }); }}
+	</div>
+</script>
 <script type="text/template" id="data-results"><%-data.results%></script>

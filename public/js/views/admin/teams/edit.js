@@ -33,6 +33,23 @@
 		}
 	});
 
+	var League = Backbone.Model.extend();
+
+	var LeaguesCollection = Backbone.Collection.extend({
+		model: League,
+		url: '/admin/leagues',
+		initialize: function(){
+			this.fetch({
+				success: function(collection){
+					app.leaguesView = new LeaguesView({collection:collection});
+				},
+				error: function(){
+					console.log('error')
+				}
+			});
+		}
+	});
+
 	app.IdentityView = Backbone.View.extend({
 		el: '#identity',
 		template: _.template( $('#tmpl-identity').html() ),
@@ -72,7 +89,6 @@
 		}
 	});
 
-	var Leagues = Backbone.Collection.extend();
 	var LeagueView = Backbone.View.extend({
 		tagName: 'option',
 		render: function(){
@@ -84,7 +100,7 @@
 	var LeaguesView = Backbone.View.extend({
 		el: '#leagues',
 		initialize: function() {
-			this.listenTo(this.collection, 'reset', this.render);
+			this.render();
 		},
 		render: function(){
 			var frag = document.createDocumentFragment();
@@ -155,16 +171,13 @@
 		el: '.page .container',
 		initialize: function() {
 			app.mainView = this;
-			var leagues = new Leagues();
 			this.results = JSON.parse( unescape($('#data-record').html()));
-			this.model = new app.Team( this.results.team );
+			this.model = new app.Team(this.results);
+			app.leagues = new LeaguesCollection();
 
 			app.headerView = new app.HeaderView();
 			app.identityView = new app.IdentityView();
 			app.deleteView = new app.DeleteView();
-
-			app.leaguesView = new LeaguesView({collection:leagues});
-			leagues.reset(this.results.leagues);
 		}
 	});
 

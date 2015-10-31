@@ -1,60 +1,42 @@
 'use strict';
-var http = require('http');
+var request = require('request');
 
 exports.find = function(req,res,next) {
-	var
-		workflow = req.app.util.workflow(req, res, next),
-		options = {
-			host:"api.punditly.com",
-			path: '/v1/leagues'
-		};
+	var workflow = req.app.util.workflow(req, res, next);
 
-	var reqst = http.get(options, function(response){
+	request(req.protocol + '://api.punditly.com/v1' + req.originalUrl.replace('/admin', '') + (Object.keys(req.query).length ? '&' : '?') + 'token=' + req.cookies.AUTH_TOKEN || '', function(error, response, body){
 
-		if (('' + response.statusCode).match(/^5\d\d$/)) {
-			//return res.render('error', {status: response.statusCode})//next({status: response.statusCode});
-			workflow.outcome.errors.push({message: 'service error', code: response.statusCode});
-			return workflow.emit('response');
+		if (error) {
+			console.log('problem with request: ' + e.message);
+			res.send(JSON.stringify(error));
 		}
 
-		// explicitly treat incoming data as utf8 (avoids issues with multi-byte chars)
-		response.setEncoding('utf8');
+		if (('' + response.statusCode).match(/^502$/)) {
+			
+			var err = {
+				message: 'Gateway error. Service unavailable', 
+				code: response.statusCode
+			};
 
-		// incrementally capture the incoming response body
-		var body = [];
-		response.on('data', function(chunk){
-			body.push(chunk);
-		});
-
-		response.on('end', function(){
-			try {
-				var parsed = JSON.parse(body.join(''));
-			} catch(err) {
-				next({message: 'Unable to parse response as JSON'});
-			}
-
+			workflow.outcome.errors.push(err);
 			if (req.xhr) {
-      	res.header("Cache-Control", "no-cache, no-store, must-revalidate");
-      	res.send(parsed);
-    	} else {
-				res.render('admin/leagues/index', {data: {results: JSON.stringify(parsed)}});
+				return workflow.emit('response');
+			} else {
+				return res.render('admin/leagues/index', {data: {results: JSON.stringify({"errors":workflow.outcome.errors})}});
 			}
-		});
+		}
 
-		response.on('error', function(err){
-			console.log(JSON.stringify(err));
-		});
-	});
-
-	reqst.on('error', function(e){
-		console.log('problem with request: ' + e.message);
-		res.send(JSON.stringify(e));
+		if (req.xhr) {
+    	res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+    	res.send(body);
+  	} else {
+			res.render('admin/leagues/index', {data: {results: body}});
+		}
 	});
 };
 
 exports.getTeams = function(req,res,next) {
 	var workflow = req.app.util.workflow(req, res, next);
-	var team = req.params.id || '';
 
 	if (req.params.id.length < 24) { // make sure it's a valid objectid string of 24 hex chars
 		workflow.response.code = 'INVALID_LEAGUE_ID';
@@ -62,50 +44,34 @@ exports.getTeams = function(req,res,next) {
 		workflow.emit('bad_request');
 	}
 
-	var options = {
-		host:"api.punditly.com",
-		path: '/v1/leagues/' + team + '/teams'
-	};
+	request('http://api.punditly.com/v1/leagues/' + req.params.id +'/teams?token=' + req.cookies.AUTH_TOKEN || '', function(error, response, body){
 
-	var reqst = http.get(options, function(response){
-
-		if (('' + response.statusCode).match(/^5\d\d$/)) {
-			workflow.outcome.errors.push({message: 'service error', code: response.statusCode});
-			return workflow.emit('response');
+		if (error) {
+			console.log('problem with request: ' + e.message);
+			res.send(JSON.stringify(error));
 		}
 
-		// explicitly treat incoming data as utf8 (avoids issues with multi-byte chars)
-		response.setEncoding('utf8');
+		if (('' + response.statusCode).match(/^502$/)) {
+			
+			var err = {
+				message: 'Gateway error. Service unavailable', 
+				code: response.statusCode
+			};
 
-		// incrementally capture the incoming response body
-		var body = [];
-		response.on('data', function(chunk){
-			body.push(chunk);
-		});
-
-		response.on('end', function(){
-			try {
-				var parsed = JSON.parse(body.join(''));
-			} catch(err) {
-				next({message: 'Unable to parse response as JSON'});
-			}
-
+			workflow.outcome.errors.push(err);
 			if (req.xhr) {
-      	res.header("Cache-Control", "no-cache, no-store, must-revalidate");
-      	res.send(parsed);
-    	} else {
-				res.render('admin/leagues/index', {data: {results: JSON.stringify(parsed)}});
+				return workflow.emit('response');
+			} else {
+				return res.render('admin/leagues/index', {data: {results: JSON.stringify({"errors":workflow.outcome.errors})}});
 			}
-		});
+		}
 
-		response.on('error', function(err){
-			console.log(JSON.stringify(err));
-		});
-	});
-
-	reqst.on('error', function(e){
-		console.log('problem with request: ' + e.message);
-		res.send(JSON.stringify(e));
+		if (req.xhr) {
+    	res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+    	res.send(body);
+  	} else {
+			res.render('admin/leagues/index', {data: {results: body}});
+		}
 	});
 };
 

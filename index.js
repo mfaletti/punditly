@@ -11,6 +11,8 @@ var
 	fs = require('fs');
 
 app.config = config;
+app.util = {};
+app.util.workflow = require('./app/util/workflow');
 
 // setup mongoose
 app.db = mongoose.createConnection(config.mongodb.uri);
@@ -41,6 +43,7 @@ app.set('project-name', config.projectName);
 app.set('company-name', config.companyName);
 app.set('system-email', config.systemEmail);
 app.set('crypto-key', config.cryptoKey);
+app.set('jwt-secret', config.jwt_secret);
 app.set('require-account-verification', config.requireAccountVerification);
 
 //smtp settings
@@ -48,17 +51,6 @@ app.set('smtp-from-name', config.smtp.from.name);
 app.set('smtp-from-address', config.smtp.from.address);
 app.set('smtp-credentials', config.smtp.credentials);
 
-//twitter settings
-app.set('twitter-oauth-key', config.oauth.twitter.key);
-app.set('twitter-oauth-secret', config.oauth.twitter.secret);
-
-//facebook settings
-app.set('facebook-oauth-key', config.oauth.facebook.key);
-app.set('facebook-oauth-secret', config.oauth.facebook.secret);
-
-//google settings
-app.set('google-oauth-key', config.oauth.google.key);
-app.set('google-oauth-secret', config.oauth.google.secret);
 
  //middleware
 app.use(express.logger('dev'));
@@ -87,19 +79,16 @@ app.use(function(req, res, next) {
 
 app.use(app.router);
 
-//config express in dev environment
-if (app.get('env') === 'dev') {
-  app.use(express.errorHandler());
-}
-
 //setup passport
 require('./app/config/passport')(app, passport);
 
 //route requests
 require('./app/routes')(app, passport);
 
-app.util = {};
-app.util.workflow = require('./app/util/workflow');
+//config express in dev environment
+if (app.get('env') === 'dev') {
+  app.use(express.errorHandler());
+}
 
 var io = require('socket.io').listen(app.listen(app.get('port'))).set('log level', 1);
 
