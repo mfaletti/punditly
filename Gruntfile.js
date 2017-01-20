@@ -39,19 +39,18 @@ module.exports = function(grunt) {
             src: ['src/js/bootstrap-datetimepicker.js','build/css/bootstrap-datetimepicker.css'], dest: 'vendor/eonasdan-bootstrap-datetimepicker'
           },
           {
-            expand: true, cwd: 'bower_components/Bootstrap-3-Typeahead',
+            expand: true, cwd: 'bower_components/bootstrap3-typeahead',
             src: ['bootstrap3-typeahead.js'], dest: 'vendor/bootstrap3-typeahead/'
           }
         ]
       },
 			source : {
 				files:[
-					{expand: true, src: ['app/**/*', 'index.js', 'package.json'], dest: 'dist/' },
+					{expand: true, src: ['app/**/*', 'index.js'], dest: 'dist/' },
           {expand: true, flatten: true, src: ['public/img/*'], dest: 'dist/public/img/'},
           {expand: true, flatten: true, src: ['public/js/lib/*'], dest: 'dist/public/js/lib'},
           {expand: true, flatten: true, cwd: 'bower_components/font-awesome/fonts',src: ['*'], dest: 'dist/public/fonts/'},
-          {expand: true, flatten: true, cwd: 'bower_components/bootstrap/fonts',src: ['*'], dest: 'dist/public/fonts/'},
-          //{expand: true, src: ['public/js/views/**'], dest: 'dist/' },
+          {expand: true, flatten: true, cwd: 'bower_components/bootstrap/fonts',src: ['*'], dest: 'dist/public/fonts/'}
 				]
 			}
     },
@@ -113,6 +112,9 @@ module.exports = function(grunt) {
       }
     },
     uglify: {
+      options: {
+        banner: '/*! repo: <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd hh:MM tt") %> */\n'
+      },
       core: {
         files: {
           'dist/public/js/core.min.js': 'build/js/core.js'
@@ -125,11 +127,6 @@ module.exports = function(grunt) {
           dest: 'dist/public/js/views/',
           expand: true
         }]
-      },
-      layouts :{
-        files: {
-          //'dist/public/js/layouts/admin.js': ['public/js/layouts/admin.js']
-        }
       }
     },
     jshint: {
@@ -185,14 +182,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-newer');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-shell');
 
-  grunt.registerTask('default', ['clean', 'copy', 'less', 'concat', 'uglify', 'cssmin', 'shell']);
-  grunt.registerTask('build', ['clean', 'copy', 'less', 'concat']);
+  grunt.registerTask('default', ['clean', 'copy', 'less', 'concat']);
+  grunt.registerTask('dist', ['default', 'uglify', 'cssmin']);
+  grunt.registerTask('deploy', ['shell']);
   grunt.registerTask('lint', ['jshint']);
 
   // on watch events
