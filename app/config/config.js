@@ -3,11 +3,11 @@
 exports.port = process.env.PORT || 8000;
 exports.env = process.env.NODE_ENV || 'dev';
 exports.mongodb = {
-  //uri: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost:27017/pd',
-  uri: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'localhost/pd'
+  uri: process.env.MONGODB_URI || process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'localhost/pd'
 };
 exports.solr = {
-	port: '8080'
+	port: '8080',
+  host: 'localhost'
 };
 
 exports.companyName = 'Punditly, Inc.';
@@ -28,8 +28,8 @@ exports.smtp = {
     address: process.env.SMTP_FROM_ADDRESS || exports.systemEmail
   },
   credentials: {
-    user: process.env.SMTP_USERNAME || 'your@email.addy',
-    password: process.env.SMTP_PASSWORD || 'bl4rg!',
+    user: process.env.SMTP_USERNAME || 'deji@punditly.com',
+    password: process.env.SMTP_PASSWORD || 'funb@lls',
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
     ssl: true
   }

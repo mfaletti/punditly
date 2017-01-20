@@ -36,7 +36,7 @@ exports.find = function(req,res,next) {
 
 		if (error) {
 			console.log('problem with request: ' + e.message);
-			res.send(JSON.stringify(error));
+			return res.send(JSON.stringify(error));
 		}
 
 		if (('' + response.statusCode).match(/^502$/)) {
